@@ -12,11 +12,8 @@
 \usepackage{float}
 \usepackage{amssymb}
 
-% experiment
-\usepackage[pdf,singlefile]{graphviz}
-
-\usepackage{draftwatermark}
-\SetWatermarkScale{4}
+%\usepackage{draftwatermark}
+%\SetWatermarkScale{4}
 
 % RSA
 \usepackage{amsthm}
@@ -196,19 +193,10 @@ In our grammar, the root node and all intermediate nodes are always operators an
 A visualization for the expression \texttt{+ 7 * / 81 27 - 11 10} as a binary tree:
 
 \begin{figure}[ht]
-\label{polishExpressionTree}
-\centering
-\digraph{polish}{
-"+" -> 7;
-"+" -> "*";
-"*" -> "/";
-"*" -> "-";
-"/" -> 81;
-"/" -> 27;
-"-" -> 11;
-"-" -> 10;
-}
-\caption{\texttt{+ 7 * / 81 27 - 11 10} shown as a binary tree}
+  \centering
+  \includegraphics[width=\textwidth,height=.95\textheight,keepaspectratio]{figures/polish}
+  \caption{\texttt{+ 7 * / 81 27 - 11 10} shown as a binary tree}
+  \label{polish}
 \end{figure}
 
 \section{Food for thought}
@@ -233,13 +221,7 @@ Figure \ref{spannABC} visualizes an unweighted and undirected graph $G=(V,E)$ wh
 
 \begin{figure}[ht]
 \centering
-\neatograph{SpannABC}{
-a -- b;
-b -- c;
-a -- c;
-a -- c;
-c -- c;
-}
+\includegraphics[height=2in]{figures/spanning-abc}
 \caption{An unweighted, undirected, cyclic graph}
 \label{spannABC}
 \end{figure}
@@ -2890,7 +2872,7 @@ SONET nodes can transitively receive line timing. Suppose a network of five SONE
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{ch-dag/abcde}
+\includegraphics[width=\columnwidth]{figures/abcde}
 \caption{A UPSR where nodes $B$, $C$, $D$, and $E$ each receive line timing from node $A$}
 \end{figure}
 
@@ -2902,7 +2884,7 @@ Configuration errors or system failures can result in timing loops. A timing loo
 
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{ch-dag/loop}
+\includegraphics[width=\columnwidth]{figures/loop}
 \caption{A SONET network containing a timing loop between nodes $B$ and $G$}
 \label{loop}
 \end{figure}
@@ -2911,7 +2893,7 @@ Reconfiguring device $B$ to receive timing from nodes $A$ and $H$ cleared alarms
 
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{ch-dag/noloop}
+\includegraphics[width=\columnwidth]{figures/noloop}
 \caption{A directed acyclic graph}
 \label{noloop}
 \end{figure}
@@ -2946,7 +2928,7 @@ $G$ obviously contains no cycle.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=\columnwidth]{abc_dag}
-\includegraphics{ch-dag/abc_dag}
+\includegraphics{figures/abc_dag}
 %\caption{A directed acyclic graph}
 \label{abc_dag}
 \end{figure}
@@ -3022,7 +3004,7 @@ The color of each vertex is initialized as white. The DFS algorithm marks a node
 
 \begin{figure}
 \centering
-\includegraphics[width=\columnwidth]{ch-dag/redblue}
+\includegraphics[width=\columnwidth]{figures/redblue}
 \caption{Red vertices belong to cyclic components in this directed graph}
 \label{redblue}
 \end{figure}
@@ -3700,7 +3682,7 @@ For relatively small input sets, such as the 8999 integers between 1000 and 1000
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\columnwidth]{ch-attractors/kaprekar}
+\includegraphics[width=\columnwidth]{figures/kaprekar}
 \caption{A sample of four-digit numbers all lead to Kaprekar's Constant}
 \label{kaprekarTree}
 \end{figure}
@@ -3817,7 +3799,7 @@ In practice the Middle-Squared method quickly attracts, usually at the fixed poi
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth,height=.95\textheight,keepaspectratio]{ch-attractors/middlesquare}
+\includegraphics[width=\textwidth,height=.95\textheight,keepaspectratio]{figures/middlesquare}
 \caption{The Middle-Square PRNG attracts at both fixed points and cycles}
 \label{middlesquare}
 \end{figure}
@@ -3937,9 +3919,7 @@ A simple function to convert an angle $\Theta$ from radians to degrees is theref
 
 This angle is not equal to an azimuth $\alpha$ shown on a compass. Trigonometry defines $\Theta=0=0\degree$ by convention as the rightmost position of the unit circle. That is, the angle formed by the coordinates $(0,0)$ and $(1,0)$. $\Theta = \pi/2 = 90\degree$ is the topmost position at $(0,1)$, $\Theta = \pi = 180\degree$ at the leftmost position $(-1,0)$, and $\Theta = {3\pi}/2 = 270\degree$ at the bottommost position $(0,-1)$. Trigonometric angles rotate counter-clockwise around the unit circle.
 
-By contrast, an azimuth $\alpha = 0\degree$ is due north, $\alpha = 90\degree$ is east, $\alpha = 180\degree$ is south, and $\alpha = 270\degree$ is west.
-
-Plotting each of these values in a table shows a relation between $\Theta$ and $\alpha$.
+By contrast, an azimuth $\alpha = 0\degree$ is due north, $\alpha = 90\degree$ is east, $\alpha = 180\degree$ is south, and $\alpha = 270\degree$ is west. Plotting each of these values in a table shows a relation between $\Theta$ and $\alpha$.
 
 \begin{center}
 \begin{tabular}{c | c}
@@ -3952,13 +3932,49 @@ $\Theta$ & $\alpha$ \\
 \end{tabular}
 \end{center}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth,keepaspectratio]{figures/azimuth}
+\caption{Trigonometric angles and azimuths}
+\end{figure}
+
 The function defining this relation is given by:
 
 \begin{equation}
 \alpha(\Theta) = (450 - (\Theta)) \mod{360}
 \end{equation}
 
+Python functions to compute each of these values are given below:
+
+\begin{lstlisting}
+import math
+
+
+def split_mgrs_grid(grid):
+  x = int(grid[0:len(grid)//2]) * 10**((10 - len(grid)) / 2)
+  y = int(grid[len(grid)//2:]) * 10**((10 - len(grid)) / 2)
+  return x, y
+
+
+def distance(p1, p2):
+  return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+
+def direction(p1, p2):
+  return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
+
+
+def degrees(theta):
+  return theta * 180 / math.pi
+
+
+def azimuth(angle):
+  return (450 - angle) % 360
+\end{lstlisting}
+
+Now for an interesting challenge: the above program (and the mathematical equations preceeding it in this chapter) contains a bug. Finding and fixing the bug is left as an exercise to the reader.
+
 \bibliographystyle{plain}
-\bibliography{ref/ref}
+\bibliography{./ref/ref.bib}
 
 \end{document}
