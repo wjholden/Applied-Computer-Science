@@ -1,0 +1,128 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='WolframEngine 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       160,          7]
+NotebookDataLength[      3904,        118]
+NotebookOptionsPosition[      2842,         90]
+NotebookOutlinePosition[      3177,        105]
+CellTagsIndexPosition[      3134,        102]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"lincoln", " ", "=", " ", 
+  RowBox[{"GeoPosition", "[", 
+   RowBox[{"{", 
+    RowBox[{"38.889306", ",", 
+     RowBox[{"-", "77.050111"}]}], "}"}], "]"}]}]], "Input",
+ CellLabel->"In[42]:=",ExpressionUUID->"3bf4d9ad-e7fd-4eb6-99aa-d6703e8532bc"],
+
+Cell[BoxData[
+ RowBox[{"GeoPosition", "[", 
+  RowBox[{"{", 
+   RowBox[{"38.889306`", ",", 
+    RowBox[{"-", "77.050111`"}]}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{3.7457113817305326`*^9},
+ CellLabel->"Out[42]=",ExpressionUUID->"4524049e-ee76-4774-b613-247b2f8c3153"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"washington", " ", "=", " ", 
+  RowBox[{"GeoPosition", "[", 
+   RowBox[{"{", 
+    RowBox[{"38.889469", ",", " ", 
+     RowBox[{"-", "77.035258"}]}], "}"}], "]"}]}]], "Input",
+ CellLabel->"In[43]:=",ExpressionUUID->"c220d723-d670-42e9-a83f-dc26fc88614e"],
+
+Cell[BoxData[
+ RowBox[{"GeoPosition", "[", 
+  RowBox[{"{", 
+   RowBox[{"38.889469`", ",", 
+    RowBox[{"-", "77.035258`"}]}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{3.7457113863488703`*^9},
+ CellLabel->"Out[43]=",ExpressionUUID->"c9c0c45b-1c0c-46b8-8060-79501a31b641"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GeoDistance", "[", 
+  RowBox[{"lincoln", ",", " ", "washington"}], "]"}]], "Input",
+ CellChangeTimes->{{3.745711390843696*^9, 3.7457113948591127`*^9}},
+ CellLabel->"In[44]:=",ExpressionUUID->"db8d5e38-d5c2-4da7-9240-bff2cf1bfad3"],
+
+Cell[BoxData[
+ TemplateBox[{"1.2887899296762908`","\"km\"","kilometers","\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{3.745711396256925*^9},
+ CellLabel->"Out[44]=",ExpressionUUID->"2bc44651-5af9-41af-8b53-8a98dc59982e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GeoDirection", "[", 
+  RowBox[{"lincoln", ",", " ", "washington"}], "]"}]], "Input",
+ CellChangeTimes->{{3.745711460342711*^9, 3.745711477511961*^9}},
+ CellLabel->"In[45]:=",ExpressionUUID->"91762889-f2c1-4217-a95b-529703a4a44a"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "89.190853038579`",RowBox[{"\[InvisibleSpace]", "\"\[Degree]\""}],"degrees",
+   "\"AngularDegrees\""},
+  "QuantityPostfix"]], "Output",
+ CellChangeTimes->{3.745711489832275*^9},
+ CellLabel->"Out[45]=",ExpressionUUID->"dc3b48b1-0b9d-42e1-99e0-53d33d1629ee"]
+}, Open  ]]
+},
+WindowSize->{910, 918},
+WindowMargins->{{Automatic, 103}, {-80, Automatic}},
+FrontEndVersion->"11.3 for Linux ARM (32-bit) (May 23, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[582, 22, 268, 6, 31, "Input",ExpressionUUID->"3bf4d9ad-e7fd-4eb6-99aa-d6703e8532bc"],
+Cell[853, 30, 273, 6, 35, "Output",ExpressionUUID->"4524049e-ee76-4774-b613-247b2f8c3153"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1163, 41, 276, 6, 31, "Input",ExpressionUUID->"c220d723-d670-42e9-a83f-dc26fc88614e"],
+Cell[1442, 49, 273, 6, 35, "Output",ExpressionUUID->"c9c0c45b-1c0c-46b8-8060-79501a31b641"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1752, 60, 254, 4, 31, "Input",ExpressionUUID->"db8d5e38-d5c2-4da7-9240-bff2cf1bfad3"],
+Cell[2009, 66, 237, 4, 35, "Output",ExpressionUUID->"2bc44651-5af9-41af-8b53-8a98dc59982e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2283, 75, 253, 4, 31, "Input",ExpressionUUID->"91762889-f2c1-4217-a95b-529703a4a44a"],
+Cell[2539, 81, 287, 6, 37, "Output",ExpressionUUID->"dc3b48b1-0b9d-42e1-99e0-53d33d1629ee"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
