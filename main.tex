@@ -3889,7 +3889,7 @@ The military grid reference system (MGRS) partitions the earth into square grids
 
 A grid reference with more digits implies greater precise. The point 17SQV1111062811 is a ``ten-digit grid''. A ten-digit grid specifies a location within a radius of 1 meter. An eight-digit grid gives 10 meters of precision, six-digit grid 100 meters, and so on.
 
-One may approximate, for the sake of simplicity, the distance and direction between MGRS coordinates by viewing the map as a plane. The digits of the numerical location form Cartesian $(x,y)$ points.
+One may approximate, for the sake of simplicity, the distance and direction between MGRS coordinates by viewing the map as a plane. This is known as the \textbf{Euclidean distance}, and it is never exactly equal to the \textbf{geodesic distance} following the curvature of the Earth. Positions on a Euclidean plane are expressed as Cartesian $(x,y)$ points.
 
 Consider two points with location digits $AB$ and $CD$. Let $n$ be the precision, so in this example $AB \to n=2$. The $(x,y)$ values must be multiplied by $10^{{(10-n)}/2}$ to reconcile units to 1 meter. Then $(x_1,y_1) = (A \times 10^{{(10 - n)}/2}, B \times 10^{{(10 - n)}/2})$ and $(x_2,y_2) = (C \times 10^{{(10 - n)}/2}, D \times 10^{{(10 - n)}/2})$.
 
@@ -3971,6 +3971,48 @@ def degrees(theta):
 def azimuth(angle):
   return (450 - angle) % 360
 \end{lstlisting}
+
+To demonstrate the accuracy of this program, consider two points 18SUJ2219306490 (the Lincoln Memorial at 38.889306, -77.050111) and 18SUJ2348206480 (the Washington Monument at 38.889469, -77.035258). Discard the zone 18S and map UJ and enter only the location digits into the above Python program.
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=\textwidth,keepaspectratio]{figures/washington-lincoln}
+\caption{The Lincoln Memorial and Washington Monument}
+\end{figure}
+
+\begin{lstlisting}
+  >>> lincoln = split_mgrs_grid("2219306490")
+>>> washington = split_mgrs_grid("2348206480")
+>>> distance(lincoln, washington)
+1289.0387891758728
+>>> azimuth(degrees(direction(lincoln, washington)))
+90.4444889844076
+\end{lstlisting}
+
+Testing the same coordinates in Mathematica we find a slightly different answer:
+
+\begin{lstlisting}
+Wolfram Language 11.3.0 Engine for Linux ARM (32-bit)
+Copyright 1988-2018 Wolfram Research, Inc.
+
+In[1]:= lincoln = GeoPosition[{38.889306, -77.050111}]
+
+Out[1]= GeoPosition[{38.8893, -77.0501}]
+
+In[2]:= washington = GeoPosition[{38.889469, -77.035258}]
+
+Out[2]= GeoPosition[{38.8895, -77.0353}]
+
+In[3]:= GeoDistance[lincoln, washington]
+
+Out[3]= 1.28879 kilometers
+
+In[4]:= GeoDirection[lincoln, washington]
+
+Out[4]= 89.1909 degrees
+\end{lstlisting}
+
+Why the difference? Mathematica's \texttt{GeoDistance} function considers the curvature of the Earth and returns a ``true'' distance. The error, even at such a small scale, demonstrates that Euclidean distance is a useful approximation for nearby points but perilously inaccurate as the distance grows.
 
 Now for an interesting challenge: the above program (and the mathematical equations preceeding it in this chapter) contains a bug. Finding and fixing the bug is left as an exercise to the reader.
 
