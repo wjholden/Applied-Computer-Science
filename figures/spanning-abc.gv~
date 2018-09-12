@@ -1,7 +1,0 @@
-neato G {
-a -- b;
-b -- c;
-a -- c;
-a -- c;
-c -- c;
-}
