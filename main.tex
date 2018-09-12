@@ -3883,9 +3883,9 @@ Cursory investigations of this algorithm show a long period and apparently rando
 
 \url{https://dl.acm.org/citation.cfm?id=272995}
 
-\chapter{MGRS}
+\chapter{Euclidean Distance}
 
-The military grid reference system (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
+The Miltiary Grid Reference System (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
 
 A grid reference with more digits implies greater precise. The point 17SQV1111062811 is a ``ten-digit grid''. A ten-digit grid specifies a location within a radius of 1 meter. An eight-digit grid gives 10 meters of precision, six-digit grid 100 meters, and so on.
 
@@ -3938,50 +3938,51 @@ $\Theta$ & $\alpha$ \\
 \caption{Trigonometric angles and azimuths}
 \end{figure}
 
-The function defining this relation is given by:
+This relation is shown as a function in equation \ref{eq:azimuth}. $\alpha(\Theta)$  returns an azimuth relative to ``grid north'' for it's alignment to the gridlines on a map. A miltiary map shows three norths: grid, true, and magnetic. True north points to the North Pole defined by the rotation of the Earth. Lines of longitude converge at the North Pole and therefore point in the direction of true north. Magnetic north is defined by the magnetic field of the Earth. Magnetic north is near but not equal to true north. Interestingly, the magnetic north pole moves. When using a magnetic compass one must add or subtract the difference between grid and magnetic north to the azimuth.
 
 \begin{equation}
-\alpha(\Theta) = (450 - (\Theta)) \mod{360}
+  \label{eq:azimuth}
+  \alpha(\Theta) = (450 - \Theta) \mod{360}
 \end{equation}
 
-Python functions to compute each of these values are given below:
+Python functions to compute each of these values are given in listing \ref{lst:euclideanMgrs}.
 
-\begin{lstlisting}
+\begin{lstlisting}[float,caption={Euclidean distance and direction functions in Python},captionpos=b,label={lst:euclideanMgrs}]
 import math
 
 
 def split_mgrs_grid(grid):
-  x = int(grid[0:len(grid)//2]) * 10**((10 - len(grid)) / 2)
-  y = int(grid[len(grid)//2:]) * 10**((10 - len(grid)) / 2)
-  return x, y
+	x = int(grid[0:len(grid)//2]) * 10**((10 - len(grid)) / 2)
+	y = int(grid[len(grid)//2:]) * 10**((10 - len(grid)) / 2)
+	return x, y
 
 
 def distance(p1, p2):
-  return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+	return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 
 def direction(p1, p2):
-  return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
+	return math.atan2(p2[1] - p1[1], p2[0] - p1[0])
 
 
 def degrees(theta):
-  return theta * 180 / math.pi
+	return theta * 180 / math.pi
 
 
 def azimuth(angle):
-  return (450 - angle) % 360
+	return (450 - angle) % 360
 \end{lstlisting}
 
-To demonstrate the accuracy of this program, consider two points 18SUJ2219306490 (the Lincoln Memorial at 38.889306, -77.050111) and 18SUJ2348206480 (the Washington Monument at 38.889469, -77.035258). Discard the zone 18S and map UJ and enter only the location digits into the above Python program.
+To demonstrate the accuracy of this program, consider two points 18SUJ2219306490 (the Lincoln Memorial at 38.889306, -77.050111) and 18SUJ2348206480 (the Washington Monument at 38.889469, -77.035258). We discard the zone 18S and map UJ and enter only the location digits.
 
-\begin{figure}[t]
+\begin{figure}[h]
 \centering
 \includegraphics[width=.75\textwidth,keepaspectratio]{figures/washington-lincoln}
 \caption{The Lincoln Memorial and Washington Monument}
 \end{figure}
 
 \begin{lstlisting}
-  >>> lincoln = split_mgrs_grid("2219306490")
+>>> lincoln = split_mgrs_grid("2219306490")
 >>> washington = split_mgrs_grid("2348206480")
 >>> distance(lincoln, washington)
 1289.0387891758728
@@ -3989,7 +3990,7 @@ To demonstrate the accuracy of this program, consider two points 18SUJ2219306490
 90.4444889844076
 \end{lstlisting}
 
-Testing the same coordinates in Mathematica we find a slightly different answer:
+Testing the same coordinates in Mathematica gives slightly different answer:
 
 \begin{lstlisting}
 Wolfram Language 11.3.0 Engine for Linux ARM (32-bit)
