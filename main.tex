@@ -3883,7 +3883,7 @@ Cursory investigations of this algorithm show a long period and apparently rando
 
 \url{https://dl.acm.org/citation.cfm?id=272995}
 
-\chapter{Euclidean Distance}
+\chapter{Euclidean Distance and MGRS}
 
 The Miltiary Grid Reference System (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
 
@@ -3990,9 +3990,9 @@ To demonstrate the accuracy of this program, consider two points 18SUJ2219306490
 90.4444889844076
 \end{lstlisting}
 
-Testing the same coordinates in Mathematica gives slightly different answer:
+Mathematica, a technical computing system, calculates similar distance and direction between the same points in listing \ref{lst:geoMathematica}.
 
-\begin{lstlisting}
+\begin{lstlisting}[float,caption={Distance computed in Mathematica},captionpos=b,label={lst:geoMathematica}]
 Wolfram Language 11.3.0 Engine for Linux ARM (32-bit)
 Copyright 1988-2018 Wolfram Research, Inc.
 
