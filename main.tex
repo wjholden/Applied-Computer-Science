@@ -1504,7 +1504,7 @@ Finally, the problematic halting condition allows a disastrous buffer overflow a
 \subsection{Bugs}
 The class of bugs where user input is allowed to exceed the size of a buffer and overwrite return pointers is known as \textit{buffer overflow attacks} \cite{Erickson:2008:HAE:1407147}.
 
-Linus Torvalds famously maintains that ``security problems are just bugs'' \cite{torvalds_2017}. From this perspective, the buffer overflow is a flaw in the correctness of a program. An input to an algorithm can lead to behavior not intended by the implementor.
+Linus Torvalds famously maintains that ``security problems are just bugs'' \cite{torvalds_2017}. From this perspective, the buffer overflow is a flaw in the correctness of a program. An input to an algorithm can lead to behavior not intended by the implementer.
 
 A buffer overflow, which may lead to arbitrary code execution, is an extreme result of a program that does not correctly handle input. All serious programming efforts should include extensive testing. For suitably small inputs it may be reasonable to attempt all possible values or all possible combinations.
 
@@ -1530,7 +1530,7 @@ The most common form of buffer overflow attack is to overwrite the return addres
 
 A second enhancement that modern operating systems provide is address space layout randomization (ASLR). As the name implies, ASLR makes memory corruption attacks more difficult by randomizing the location where the stack, heap, and libraries might be located.
 
-Modern processors allow operating systems to mark portions of memory non-executable \cite{apple}. Finally, modern compilers have several features (such as \texttt{-fstack-protector}) that insert runtime checks for memory corruption.
+Modern processors allow operating systems to mark portions of memory non-executable \cite{apple}. Finally, modern compilers have several features (such as \texttt{-fstack-protector}) that insert run time checks for memory corruption.
 
 \subsection{Unsafe library functions}
 Many legacy functions in C standard libraries are known to be unsafe. These unsafe functions include \texttt{strcpy}, \texttt{scanf}, and dozens more.
@@ -2707,7 +2707,7 @@ A double-ended queue, or \textbf{deque} (pronounced ``deck''), allows extraction
 
 Each of these data structures can be modeled in several ways.
 
-{\huge todo: explain different approaches (array, linked list, binary tree), provide sample code for each in Java instead of C, and give a table contrasting asymptotic runtimes of each.}
+{\huge todo: explain different approaches (array, linked list, binary tree), provide sample code for each in Java instead of C, and give a table contrasting asymptotic run times of each.}
 
 \begin{lstlisting}
 #include<stdio.h>
@@ -2866,7 +2866,7 @@ Citizens band (CB) radio operates at 27 \si{\MHz}. The practice of using ``skywa
 
 \chapter{Directed Acyclic Graphs}
 
-Synchronous Optical Networking (SONET) is a communications technology for wide area networking. SONET nodes require average clock rates that are nearly equal (\textit{pesiochronous}) to communicate effectively. The node can reference an external timing source, an internal clock, or receive timing from adjacent nodes. When a SONET node receives time from another SONET node this is called \textit{line timing}.
+Synchronous Optical Networking (SONET) is a communications technology for wide area networking. SONET nodes require average clock rates that are nearly equal (\textit{plesiochronous}) to communicate effectively. The node can reference an external timing source, an internal clock, or receive timing from adjacent nodes. When a SONET node receives time from another SONET node this is called \textit{line timing}.
 
 SONET nodes can transitively receive line timing. Suppose a network of five SONET nodes $\{A, B, C, D, E\}$ communicates across a Unidirectional Path Switched Ring (UPSR). Each segment in the path has two Optical Carrier (OC-N) links operating in either working or protection states.
 
@@ -3858,13 +3858,7 @@ public class RANDU {
 }
 \end{lstlisting}
 
-Cursory investigations of this algorithm show a long period and apparently random numbers, but RANDU has a flaw that is not immediately obvious. Plotting the 
-
-\section{Mersenne Twister}
-
-
-
-\section{TCP Sequence Numbers}
+Cursory investigations of this algorithm show a long period and apparently random numbers, but RANDU has a flaw that is not immediately obvious. Plotting the \textbf{todo}.
 
 
 \url{https://tools.ietf.org/html/rfc1948}
@@ -3883,9 +3877,13 @@ Cursory investigations of this algorithm show a long period and apparently rando
 
 \url{https://dl.acm.org/citation.cfm?id=272995}
 
+\chapter{ATM and Floyd-Warshall}
+
+Todo.
+
 \chapter{Euclidean Distance and MGRS}
 
-The Miltiary Grid Reference System (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
+The Military Grid Reference System (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
 
 A grid reference with more digits implies greater precise. The point 17SQV1111062811 is a ``ten-digit grid''. A ten-digit grid specifies a location within a radius of 1 meter. An eight-digit grid gives 10 meters of precision, six-digit grid 100 meters, and so on.
 
@@ -3938,7 +3936,7 @@ $\Theta$ & $\alpha$ \\
 \caption{Trigonometric angles and azimuths}
 \end{figure}
 
-This relation is shown as a function in equation \ref{eq:azimuth}. $\alpha(\Theta)$  returns an azimuth relative to ``grid north'' for it's alignment to the gridlines on a map. A miltiary map shows three norths: grid, true, and magnetic. True north points to the North Pole defined by the rotation of the Earth. Lines of longitude converge at the North Pole and therefore point in the direction of true north. Magnetic north is defined by the magnetic field of the Earth. Magnetic north is near but not equal to true north. Interestingly, the magnetic north pole moves. When using a magnetic compass one must add or subtract the difference between grid and magnetic north to the azimuth.
+This relation is shown as a function in equation \ref{eq:azimuth}. $\alpha(\Theta)$  returns an azimuth relative to ``grid north'' for it's alignment to the gridlines on a map. A military map shows three norths: grid, true, and magnetic. True north points to the North Pole defined by the rotation of the Earth. Lines of longitude converge at the North Pole and therefore point in the direction of true north. Magnetic north is defined by the magnetic field of the Earth. Magnetic north is near but not equal to true north. Interestingly, the magnetic north pole moves. When using a magnetic compass one must add or subtract the difference between grid and magnetic north to the azimuth.
 
 \begin{equation}
   \label{eq:azimuth}
@@ -4015,7 +4013,7 @@ Out[4]= 89.1909 degrees
 
 Why the difference? Mathematica's \texttt{GeoDistance} function considers the curvature of the Earth and returns a ``true'' distance. The error, even at such a small scale, demonstrates that Euclidean distance is a useful approximation for nearby points but perilously inaccurate as the distance grows.
 
-Now for an interesting challenge: the above program (and the mathematical equations preceeding it in this chapter) contains a bug. Finding and fixing the bug is left as an exercise to the reader.
+Now for an interesting challenge: the above program (and the mathematical equations preceding it in this chapter) contains a bug. Finding and fixing the bug is left as an exercise to the reader.
 
 \bibliographystyle{plain}
 \bibliography{./ref/ref.bib}
