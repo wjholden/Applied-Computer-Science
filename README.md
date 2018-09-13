@@ -33,4 +33,5 @@ This is a Creative Commons Attribution Sharealike 4.0 endeavor.
     - HeapSort
 - Traveling Salesman
 - Fractal tree
-- Fibonacci Q-matrix, inverse function
+- Fibonacci Q-matrix, inverse function, Binet
+- Monte Carlo approximation of Pi (save this for March)
