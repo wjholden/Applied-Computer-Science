@@ -10,12 +10,12 @@ I try to give a weekly computer science lecture at my workplace. These are my le
 - Serialization at the Presentation Layer
 - Balanced Trees (AVL, Splay, Red-Black)
 - Troubleshooting techniques
-..- Follow-the-path
-..- Divide-and-conquer
-..- Spot-the-difference
-..- Rubber ducky
-..- Elimination
-..- Dartboard
-..- Logs
-..- Memory and intuition
+    - Follow-the-path
+    - Divide-and-conquer
+    - Spot-the-difference
+    - Rubber ducky
+    - Elimination
+    - Dartboard
+    - Logs
+    - Memory and intuition
 
