@@ -3881,6 +3881,10 @@ Cursory investigations of this algorithm show a long period and apparently rando
 
 Todo.
 
+\chapter{Disjoint Sets}
+
+Todo.
+
 \chapter{Euclidean Distance and MGRS}
 
 The Military Grid Reference System (MGRS) partitions the earth into square grids. A typical grid reference might look like 17SQV1111062811. The leading 17S designates the large grid zone, the QV identifies a 100,000-kilometer square in this zone, and the remaining digits identify the location. MGRS coordinates are always given with an even number of decimal digits specifying location. The location may be left-padded if necessary. The first half of the location digits are known as the easting and give the longitudinal position. The second half of the location digits are known as the northing and give the latitudinal position.
@@ -4014,6 +4018,217 @@ Out[4]= 89.1909 degrees
 Why the difference? Mathematica's \texttt{GeoDistance} function considers the curvature of the Earth and returns a ``true'' distance. The error, even at such a small scale, demonstrates that Euclidean distance is a useful approximation for nearby points but perilously inaccurate as the distance grows.
 
 Now for an interesting challenge: the above program (and the mathematical equations preceding it in this chapter) contains a bug. Finding and fixing the bug is left as an exercise to the reader.
+
+\chapter{Hashing}
+
+Hashing functions are irreversible and deterministic methods of creating signatures for arbitrary input. MD5 and SHA are well-known hashing algorithms that are used in many security applications. These algorithms are fairly complicated and produce fixed-size outputs.
+
+A well-known class of functions for hashing integers uses a large prime number $p$ and integers $0 \le a < p$, $0 < b < p$, and a modulus $m < p$.
+
+\begin{equation}
+  h_{ab}(k) = ((ak + b) \mod{p}) \mod{m}
+\end{equation}
+
+Using $p=17$, $m=6$, $a=3$, and $b=4$ we can use Python to easily find hashes for 0 through 9.
+
+\begin{lstlisting}
+>>> def hash_integer(x, a, b, p, m):
+...     return ((x * a + b) % p) % m
+...
+>>> p = 17
+>>> m = 6
+>>> a = 3
+>>> b = 4
+>>> for i in range(10):
+...     print("h({0}) = {1}".format(i, hash_integer(i, a, b, p, m)))
+...
+h(0) = 4
+h(1) = 1
+h(2) = 4
+h(3) = 1
+h(4) = 4
+h(5) = 2
+h(6) = 5
+h(7) = 2
+h(8) = 5
+h(9) = 2
+\end{lstlisting}
+
+We can hash a string, or any byte array, with \textbf{polynomial hashing}. Polynomial hashing produces families of hash functions using a fixed prime $p$ and $1 \le x < p$.
+
+\begin{equation}
+  h_p^x(S) = \sum_{i=0}^{|S|-1} {S[i] x^i \mod{p}}
+\end{equation}
+
+This method is called polynomial hashing because it generates polynomials of $x$. For example, if the cardinality of $S$ is three then:
+
+\begin{equation}
+  \begin{split}
+    h_p^x(S) &= \sum_{i=0}^{2} {S[i] x^i \mod{p}}\\
+    &= (S[0] \mod{p}) + (S[1] x \mod{p}) + (S[2] x^2 \mod{p})
+  \end{split}
+\end{equation}
+
+The following Python program demonstrates hashing a string of variable length using $x=31$ and $p=255$.
+
+\begin{lstlisting}
+>>> def hash_string(s, x, p):
+...     hash = 0
+...     for character in s:
+...         hash = hash * x + (ord(character) % p)
+...     return hash
+...
+>>>
+>>> for i in range(1,10):
+...     print(hash_string("hello world"[0:i], 31, 255))
+...
+104
+3325
+103183
+3198781
+99162322
+3074032014
+95294992553
+2954144769254
+91578487846988
+\end{lstlisting}
+
+A cursory investigation of an ASCII table shows $\textrm{`h'} = 104$,  $\textrm{`e'} = 101$, and $\textrm{`l'} = 108$. Indeed, $104 \times 31 + 101 = 3325$, $3325 \times 31 + 108 = 103183$, and so on.
+
+The numbers $x=31$ and $p=255$ are chosen for this example because they match those used by Java's \texttt{String} class. A similar test reveals an interesting difference between the two languages.
+
+\begin{lstlisting}
+for (int i = 1 ; i < 10 ; i++) {
+  System.out.println("hello world".substring(0, i).hashCode());
+}
+\end{lstlisting}
+
+This program produces a slightly different result because Java's \texttt{int} type overflows at $2^31$.
+
+\begin{lstlisting}
+104
+3325
+103183
+3198781
+99162322
+-1220935282
+805712041
+-792730394
+1195161676
+\end{lstlisting}
+
+A useful application of hashing is to construct a \textbf{hash table}. A hash table is a data structure that offers very fast search, modify, and insertion operations. A hash table consists of an array of ``buckets''. Each bucket can be a dynamic array or a linked list. A hash table assigns values to buckets using their hash modulo the capacity of the table.
+
+\begin{lstlisting}
+def hash_string(s):
+    hash = 0
+    for character in s:
+        hash = hash * 31 + (ord(character) % 255)
+    return hash
+
+
+def rehash(table, load, capacity):
+    c = capacity * 2
+    t = [[] for _ in range(c)]
+    i = 0
+    for bucket in table:
+        for e in bucket:
+            t, i, c = insert(t, e, i, c)
+    return t, i, c
+
+
+def insert(table, value, load, capacity):
+    if load / capacity >= 0.9: # keep load factor less than 0.9
+        table, load, capacity = rehash(table, load, capacity)
+    bucket = table[hash_string(value) % capacity]
+    bucket.append(value) 
+    return table, load + 1, capacity
+
+
+def contains(table, value):
+    bucket = table[hash_string(value) % capacity]
+    for e in bucket:
+        if e == value:
+            return True
+    return False
+
+
+def remove(table, value, load, capacity):
+    bucket = table[hash_string(value) % capacity]
+    bucket.remove(value)
+    return table, load - 1, capacity
+
+
+table = [[]]
+capacity = 1
+load = 0
+
+words = """This paragraph contains some duplicate words. The
+duplicated words will be removed as the program runs. We
+generally want our algorithm to avoid putting more than one word
+into a single bucket. We can heuristically guarantee this by
+randomly selecting a new set of constants for the hashing
+function each time.""".split()
+
+for value in words:
+    if contains(table, value):
+        table, load, capacity = remove(table, value, load, capacity)
+    else:
+        table, load, capacity = insert(table, value, load, capacity)
+    print(table)
+    print()
+print(load)
+print(capacity)
+\end{lstlisting}
+
+This program adds a word if it is not present in the hash table and removes it otherwise. The first several lines of output are:
+
+\begin{lstlisting}[breaklines=true]
+[['This']]
+
+[['This', 'paragraph'], []]
+
+[[], [], ['This', 'paragraph'], ['contains']]
+
+[['some'], [], ['This', 'paragraph'], ['contains']]
+
+[[], [], [], ['duplicate'], ['some'], [], ['This', 'paragraph'], ['contains']]
+
+[[], [], [], ['duplicate'], ['some'], ['words.'], ['This', 'paragraph'], ['contains']]
+
+[[], ['The'], [], ['duplicate'], ['some'], ['words.'], ['This', 'paragraph'], ['contains']]
+
+[[], ['The', 'duplicated'], [], ['duplicate'], ['some'], ['words.'], ['This', 'paragraph'], ['contains']]
+
+[[], ['The'], [], [], ['some'], ['words.'], [], [], [], ['duplicated', 'words'], [], ['duplicate'], [], [], ['This', 'paragraph'], ['contains']]
+
+[[], ['The'], ['will'], [], ['some'], ['words.'], [], [], [], ['duplicated', 'words'], [], ['duplicate'], [], [], ['This', 'paragraph'], ['contains']]
+
+[[], ['The'], ['will'], ['be'], ['some'], ['words.'], [], [], [], ['duplicated', 'words'], [], ['duplicate'], [], [], ['This', 'paragraph'], ['contains']]
+
+[['removed'], ['The'], ['will'], ['be'], ['some'], ['words.'], [], [], [], ['duplicated', 'words'], [], ['duplicate'], [], [], ['This', 'paragraph'], ['contains']]
+\end{lstlisting}
+
+The final line of output is:
+
+\begin{lstlisting}[breaklines=true]
+[[], ['each', 'time.'], ['heuristically'], ['be'], ['program', 'bucket.'], [], [], [], ['single', 'guarantee'], ['for'], ['word'], ['duplicate'], ['our'], [], [], ['constants'], ['want', 'can', 'randomly'], ['The'], ['will'], [], ['hashing'], ['more'], [], ['by', 'of'], ['function'], [], [], [], [], [], ['this'], ['contains'], ['removed', 'into', 'new'], ['than'], ['set'], [], [], ['words.'], ['runs.', 'one', 'selecting'], [], [], ['words'], [], [], [], [], ['paragraph'], ['algorithm'], [], [], ['as'], [], ['some'], ['generally', 'avoid'], [], [], [], ['duplicated'], [], ['to'], [], ['putting'], ['This'], []]
+\end{lstlisting}
+
+Hash tables frequently contain collisions. We see that the strings ``each'' and ``time.'' hash to the same value.
+
+\begin{lstlisting}
+>>> hash_string("each")
+3105281
+>>> hash_string("each") % 64
+1
+>>> hash_string("time.")
+110364417
+>>> hash_string("time.") % 64
+1
+\end{lstlisting}
+
+By keeping the load factor less than 0.9 the hash table minimizes collisions and is able to insert, search, and remove elements in effectively constant $O(1)$ time. Theoretically, hash table lookups can be even faster than logarithmic $O(\log{n})$ time of binary search trees.
 
 \bibliographystyle{plain}
 \bibliography{./ref/ref.bib}
