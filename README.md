@@ -8,6 +8,8 @@ I have migrated many of the figures from PNG/JPG to PDF. PDFs from GraphViz are 
 
 This is a Creative Commons Attribution Sharealike 4.0 endeavor.
 
+Somehow it did not occur to me to check if the title was in use before I created this repository. There is already a book of the same title by Shane Torbert. I will have to think of a new name. I am open to suggestions.
+
 ## Ideas for future chapters
 - Priority queue, heapsort
 - Dynamic arrays, amortized analysis
