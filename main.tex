@@ -4230,6 +4230,57 @@ Hash tables frequently contain collisions. We see that the strings ``each'' and 
 
 By keeping the load factor less than 0.9 the hash table minimizes collisions and is able to insert, search, and remove elements in effectively constant $O(1)$ time. Theoretically, hash table lookups can be even faster than logarithmic $O(\log{n})$ time of binary search trees.
 
+\chapter{Network Technologies}
+
+\section{Ethernet Switching}
+
+Suppose a typical workstation on a LAN has an IP address of 192.0.2.5, a subnet mask of 255.255.255.0, a default gateway of 192.0.2.1, and a MAC address of 0053.0002.0001. The workstation needs to establish an IP connection with a remote server with IP address 203.0.113.80. The workstation uses its routing table to determine if the 203.0.113.80 is directly connected to any IP interface. The destination 203.0.113.80 is not directly connected so the workstation consults its routing table to find the most specific route matching the destination IP. Workstations almost always have exactly one remote route -- a default route (0.0.0.0/0). The default route (also known as a default gateway) gives the workstation a first-hop destination that can transitively forward IP packets.
+
+An IP packet with a source 192.0.2.5 and destination 203.0.113.80 contains no information that could be used to deliver the IP packet to the default gateway. Instead, the IP packet is encapsulated in an Ethernet frame with a source MAC address of 0053.0002.0001. The workstation must discover the MAC address associated with the default gateway 192.0.2.1. The protocol used to discover MAC addresses for IP devices attached to a LAN is the Address Resolution Protocol (ARP). ARP uses Ethernet broadcasts to query the LAN for the desired IP address (\texttt{show ip arp}).
+
+A switch maintains a MAC address table of all attached Ethernet devices. A MAC address table is sometimes referred to as a CAM (content addressable memory) table. This table records the MAC address, the interface on which this MAC address was learned, and the time since the address was last seen. Cisco switches automatically remove MAC addresses from the CAM table if the MAC address has not been seen in five minutes (\texttt{show mac address-table aging-time}).
+
+When a switch receives an Ethernet frame it always updates the CAM table with the source MAC address. If the source MAC address was not previously known then it will be added to the CAM table with the incoming interface. If the source MAC as previously known on the same interface then the age is updated. Finally, if the MAC address was previously known but on a different interface then the entry will be updated appropriately.
+
+The switch then makes a forwarding decision using the destination MAC address. If the CAM table contains the destination MAC (and the outgoing port is not the same as the incoming port) then the switch forwards the frame to the outgoing port. If the CAM table does not contain the destination MAC then the switch will forward an identical copy of the frame to each active port (except the incoming port) in a process known as flooding. Flooding is similar but not identical to broadcasting; the distinction is that a true broadcast uses a destination MAC address of ffff.ffff.ffff.
+
+The algorithm for Ethernet switching is \textbf{exact match else flood}. Ethernet switching is very fast in part because the frame is not modified in transit. When compared to forwarding IP packets, switches can forward frames using relatively simple hardware circuits.
+
+Broadcasts and floods pose a challenge to networks that contain cycles. A frame may loop endlessly, consuming all bandwidth until the cycle is broken. Ethernet switches solve this problem using the Spanning Tree Protocol (STP). When two Ethernet switches are connected they exchange Bridge Protocol Data Units (BPDUs) to elect a root bridge. ``Bridge'' is an archaic term that refers to a two-port switch. With the root bridge elected the switches apply a simple algorithm to unblock ports below the root bridge. The resulting topology is both deterministic and provably acyclic.
+
+\section{IP Routing}
+
+The Internet Protocol was designed for scalability. The switches on even the largest of modern networks seldom hold more than a few thousand or so MAC addresses. By contrast, the BGP table for the commercial Internet contains over half a million routes. Forwarding IP packets efficiently at this scale requires a different approach from Ethernet. The major difference is that routes contain both an address and prefix length.
+
+A IP route of 198.51.100.128/25 has a length of 25 bits. All bits in the first 25 bits of 198.51.100.0 indicate a network. The remaining bits represent a host within that network. Routes can be summarized to reduce the size of routing tables. For example, 198.51.100.8/30 and 198.51.100.12/30 are contiguous and can be aggregated as 198.51.100.8/29.
+
+An IP router contains routes to destination prefixes. The next hop for the route might be an interface or an IP address. The next-hop IP may be recursively defined. For example, 198.51.100.8/29 might be reachable via 198.51.100.59, and 198.51.100.59 via 192.0.2.5, and 192.0.2.5 via interface ATM 1/0.10.
+
+Routers forward packets using the destination IP address given in the packet. The router selects the longest prefix where all bits in the route match that of the destination IP address. Consider a router with routes 203.0.113.0/25 via ATM 1/0.10, 203.0.113.0/26 via ATM 1/0.20, and 203.0.113.3/32 via ATM 1/0.30. A packet destined to 203.0.113.2 will be forwarded through ATM 1/0.30. Any packet in the range 203.0.113.0-63 will be forwarded through ATM 1/0.20. Any packet in 203.0.113.64-127 will be forwarded through ATM 1/0.10. If the router has only these three routes then all packets outside these ranges will be dropped.
+
+The algorithm for IP routing is \textbf{most-specific prefix else drop}. A router with a default route will use the next-hop address or interface for 0.0.0.0/0 if no more-specific route matches the destination address. IP unicast routing does not consider source IP addresses.
+
+Packets can be routed asymmetrically --- traffic may take a different path in each direction. Packets can be load-balanced over multiple paths. Multipath forwarding can improve capacity but introduces sequencing problems that must be solved by higher-level protocols.
+
+Both routing and switching provide ``best-effort'' delivery. Delivery is not guaranteed; lost packets and frames must be retransmitted by the host. Ethernet and IP are stateless (connectionless); a session need not be created before communication begins.
+
+Resource reservation can be accomplished through creative application of Quality of Service (QoS) configuration but in general neither Ethernet nor IP provide native bandwidth guarantees. Packets are buffered using a first-in/first-out queue. If the forwarding buffer is full then new packets cannot be enqueued; this is known as ``tail-drop.''
+
+IP packets contain a ``time to live'' (TTL) field that is decremented at each hop. If an IP packet's TTL reaches zero then the packet is dropped and an ICMP unreachable message is sent to the source. An optimal IP network will contain no cycles because each router forwards packets strictly closer to the destination but the TTL field is still provided in case network operators make mistakes. Modifying the TTL field requires each router to recompute the packet checksum.
+
+\section{ATM}
+
+Ethernet switches and IP routers build reachability tables based on configuration and information learned. Each device makes autonomous forwarding decisions. ATM does not work this way. ATM switches forward cells over virtual circuits. Virtual circuits are connection-oriented and must be established before any communication is possible. These connections can be permanent or on-demand. Telephones are a common case for on-demand virtual circuits. Like IP, and unlike X.25, ATM provides best-effort delivery.
+
+The connection-oriented nature of ATM allows for bandwidth guarantees. A permanent virtual circuit can be provisioned for a fixed 
+
+\section{SONET}
+
+\section{DWDM}
+
+\section{MPLS}
+
+
 \bibliographystyle{plain}
 \bibliography{./ref/ref.bib}
 
